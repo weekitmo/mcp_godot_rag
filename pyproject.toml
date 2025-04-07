@@ -1,0 +1,24 @@
+[project]
+name = "mcp-godotrag"
+version = "0.1.0"
+description = "Add your description here"
+readme = "README.md"
+requires-python = ">=3.12"
+dependencies = [
+    "accelerate>=1.6.0",
+    "chromadb>=1.0.0",
+    "langchain>=0.3.23",
+    "mcp[cli]>=1.6.0",
+    "pypandoc>=1.15",
+    "requests>=2.32.3",
+    "sentence-transformers>=4.0.2",
+    "torch>=2.6.0",
+    "transformers>=4.51.0",
+]
+
+[tool.pyright]
+venvPath = "."
+venv = "./.venv"
+
+[[tool.uv.index]]
+url = "https://mirrors.aliyun.com/pypi/simple"
