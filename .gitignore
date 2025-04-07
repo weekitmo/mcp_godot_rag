@@ -12,4 +12,12 @@ wheels/
 docs
 artifacts
 
+# OS generated files
 .DS_Store
+
+# Sensitive information and credentials
+.env
+.env.local
+*.pem
+*.key
+
