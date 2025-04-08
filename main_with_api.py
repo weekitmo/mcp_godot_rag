@@ -1,14 +1,41 @@
+from chromadb.utils.embedding_functions import DefaultEmbeddingFunction
 from mcp.server.fastmcp import FastMCP
 import chromadb
-from sentence_transformers import SentenceTransformer
+import os
 import argparse
 import signal
 import sys
+import openai
 
 mcp = FastMCP("Godot RAG Server")
 
 collection: chromadb.Collection
-model = SentenceTransformer("sentence-transformers/all-MiniLM-L6-v2")
+base_url = "https://api.siliconflow.cn/v1"
+
+parser = argparse.ArgumentParser(description="Start the Godot RAG MCP Server")
+parser.add_argument(
+    "--chromadb-path",
+    "-d",
+    type=str,
+    required=True,
+    help="Path to the ChromaDB database",
+)
+parser.add_argument(
+    "--collection-name",
+    "-c",
+    type=str,
+    required=True,
+    help="Name of the ChromaDB collection to query",
+)
+parser.add_argument(
+    "--api-key",
+    "-k",
+    help="OpenAI API key (if not provided, will try to use OPENAI_API_KEY from environment or .env.local file)",
+)
+
+args = parser.parse_args()
+
+openai_client = openai.Client(base_url=base_url, api_key=args.api_key)
 
 
 @mcp.tool()
@@ -28,17 +55,19 @@ def get_godot_context(query: str) -> list:
         list of relevant Godot documentation/references snippets
     """
     try:
+        embeddings = openai_client.embeddings.create(model="BAAI/bge-m3", input=[query])
+
         results = collection.query(
-            query_embeddings=model.encode([query]).astype(float).tolist(), n_results=20
+            query_embeddings=embeddings.data[0].embedding, n_results=20
         )
 
         # 添加检查确保结果不是None且包含预期的结构
         if results is None or "documents" not in results:
             return ["No documents found"]
-            
+
         if not results["documents"] or len(results["documents"]) == 0:
             return ["No documents found"]
-            
+
         if results["documents"][0] is None:
             return ["No document content found"]
 
@@ -50,29 +79,11 @@ def get_godot_context(query: str) -> list:
 
 
 if __name__ == "__main__":
-    parser = argparse.ArgumentParser(description="Start the Godot RAG MCP Server")
-    parser.add_argument(
-        "--chromadb-path",
-        "-d",
-        type=str,
-        required=True,
-        help="Path to the ChromaDB database",
-    )
-    parser.add_argument(
-        "--collection-name",
-        "-c",
-        type=str,
-        required=True,
-        help="Name of the ChromaDB collection to query",
-    )
-
-    args = parser.parse_args()
-
     # Set up signal handlers for graceful shutdown
     def signal_handler(sig, frame):
         print("\nShutting down gracefully. Please wait...")
         # Close ChromaDB resources
-        if 'client' in globals():
+        if "client" in globals():
             try:
                 # ChromaDB's PersistentClient doesn't have a _client attribute
                 # Just let it be garbage collected

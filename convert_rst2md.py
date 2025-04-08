@@ -44,9 +44,16 @@ def rst_to_markdown(rst_content, src_dir=None):
     """
     try:
         # Convert RST to HTML
-        html = publish_parts(
+        parts = publish_parts(
             rst_content, writer=Writer(), settings_overrides={"report_level": 5}
-        )["html_body"]
+        )
+        
+        # Check if html_body exists in the returned dictionary
+        if "html_body" not in parts:
+            logger.error("html_body not found in the published parts")
+            return None
+            
+        html = parts["html_body"]
 
         # Convert HTML to Markdown
         markdown = pypandoc.convert_text(html, "md", format="html")
@@ -76,6 +83,8 @@ def clean_markdown(markdown, src_dir=None):
             return f"![{alt_text}]({img_path})"
         else:
             # Handle paths relative to the original docs directory
+            if src_dir is None:
+                return f"![{alt_text}]({img_path})"
             return f"![{alt_text}](../{os.path.basename(src_dir)}/{img_path})"
 
     markdown = re.sub(r"!\[([^\]]*)\]\(([^)]+)\)", fix_image_link, markdown)

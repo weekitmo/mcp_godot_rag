@@ -5,7 +5,7 @@ import json
 import hashlib
 import argparse
 from typing import List, Dict, Any
-from langchain.text_splitter import RecursiveCharacterTextSplitter
+from langchain.text_splitter import Language, RecursiveCharacterTextSplitter
 
 
 class TextChunker:
@@ -30,7 +30,7 @@ class TextChunker:
         
         # Initialize LangChain's RecursiveCharacterTextSplitter
         self.splitter = RecursiveCharacterTextSplitter.from_language(
-            language="markdown",
+            language=Language.MARKDOWN,
             chunk_size=chunk_size,
             chunk_overlap=chunk_overlap,
             add_start_index=True,

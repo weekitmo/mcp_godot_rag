@@ -6,10 +6,10 @@ def read_markdown(filepath: str):
         return f.read().split("\n")
 
 if __name__ == "__main__":
-    model = SentenceTransformer("sentence-transformers/paraphrase-multilingual-MiniLM-L12-v2")
+    model = SentenceTransformer("sentence-transformers/all-MiniLM-L6-v2")
     sentences = read_markdown("test.md")
     embeddings = model.encode(sentences)
-    print(embeddings)
+    print(embeddings.tolist())
 
 """
 [[-0.25564343 -0.10067613 -0.02242378 ...  0.03095629 -0.04536473

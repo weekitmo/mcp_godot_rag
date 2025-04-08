@@ -63,7 +63,7 @@ class ChunkVectorizer:
         # Create a new collection
         self.collection = self.client.create_collection(
             name=self.collection_name,
-            embedding_function=self.embedding_function,
+            embedding_function=self.embedding_function, # type: ignore
             metadata={
                 "hnsw:space": "cosine"
             },  # Using cosine similarity for semantic search
@@ -119,7 +119,7 @@ class ChunkVectorizer:
 
             # Embeddings are computed automatically by ChromaDB when using the add method
             self.collection.add(
-                ids=batch_ids, documents=batch_texts, metadatas=batch_metadatas
+                ids=batch_ids, documents=batch_texts, metadatas=batch_metadatas # type: ignore
             )
 
         print(f"Successfully stored {len(chunks)} chunks in ChromaDB")
@@ -155,7 +155,7 @@ class CustomEmbeddingFunction:
             List of embeddings as float lists
         """
         embeddings = self.model.encode(input)
-        return embeddings.tolist()
+        return embeddings.tolist() # type: ignore
 
 
 if __name__ == "__main__":
@@ -184,6 +184,8 @@ if __name__ == "__main__":
     )
 
     args = parser.parse_args()
+
+    print(f"Using model: {args.model}")
 
     vectorizer = ChunkVectorizer(
         input_file=args.input,

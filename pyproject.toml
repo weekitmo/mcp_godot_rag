@@ -7,11 +7,17 @@ requires-python = ">=3.12"
 dependencies = [
     "accelerate>=1.6.0",
     "chromadb>=1.0.0",
+    "dotenv>=0.9.9",
+    "fastmcp>=0.4.1",
+    "httpx[socks]>=0.28.1",
     "langchain>=0.3.23",
     "mcp[cli]>=1.6.0",
+    "numpy>=2.2.4",
+    "openai>=1.70.0",
     "pypandoc>=1.15",
     "requests>=2.32.3",
     "sentence-transformers>=4.0.2",
+    "socksio>=1.0.0",
     "torch>=2.6.0",
     "transformers>=4.51.0",
 ]
