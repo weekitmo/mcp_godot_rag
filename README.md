@@ -76,3 +76,8 @@ npx @modelcontextprotocol/inspector \
 - [bge-m3](https://huggingface.co/BAAI/bge-m3)
 
 - [bge-large-zh-v1.5](https://huggingface.co/BAAI/bge-large-zh-v1.5)
+
+
+# Other
+
+mcp_godot_rag is indexed and certified by [MCP Review](https://mcpreview.com/mcp-servers/weekitmo/mcp_godot_rag)
