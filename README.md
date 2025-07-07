@@ -1,3 +1,5 @@
+[![MseeP.ai Security Assessment Badge](https://mseep.net/pr/weekitmo-mcp-godot-rag-badge.png)](https://mseep.ai/app/weekitmo-mcp-godot-rag)
+
 # A MCP server for Godot RAG
 
 This MCP server is used to provide Godot documentation to the Godot RAG model.
